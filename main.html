@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幽喵歌单抽卡系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局样式 */
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --accent: #ffd166;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --highlight-pink: #ffb6c1;
+            --highlight-gray: #e9ecef;
+            --secret-color: #a0a0a0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gradient);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            background-attachment: fixed;
+        }
+        
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            width: 95%;
+            margin: 20px auto;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 头部样式 */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: var(--dark);
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+        
+        /* 控制区域样式 */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .controls > * {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .controls select, .controls input {
+            height: 50px;
+            padding: 0 15px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .controls select:focus, .controls input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+            outline: none;
+        }
+        
+        .controls input {
+            padding-left: 45px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23999999" width="24" height="24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            background-size: 20px;
+        }
+        
+        /* 绝密选项样式 */
+        .secret-option {
+            color: var(--secret-color);
+            font-style: italic;
+            opacity: 0.7;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        button {
+            height: 50px;
+            padding: 0 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #searchBtn {
+            background: var(--secondary);
+            color: white;
+            flex: 2;
+        }
+        
+        #drawBtn {
+            background: var(--primary);
+            color: white;
+            flex: 1;
+        }
+        
+        /* 直播间样式 */
+        .live-container {
+            margin: 30px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .live-container::before {
+            content: "LIVE";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff0000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            display: block;
+        }
+        
+        /* 表格样式 */
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+        }
+        
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th {
+            background: var(--dark);
+            color: white;
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
+        
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tbody tr:hover {
+            background-color: #f1f1f1;
+            transform: translateX(5px);
+        }
+        
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* 高亮样式 */
+        .highlight-true {
+            background-color: var(--highlight-pink) !important;
+            font-weight: 600;
+        }
+        
+        .highlight-false {
+            background-color: var(--highlight-gray) !important;
+        }
+        
+        /* 抽取动画效果 */
+        .drawing-animation {
+            animation: drawPulse 1s infinite;
+        }
+        
+        @keyframes drawPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+        
+        /* 结果卡片样式 */
+        .result-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .result-card.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .result-card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .result-card p {
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        .result-card .close-btn {
+            margin-top: 20px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .result-card .close-btn:hover {
+            background: var(--primary);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.show {
+            display: block;
+        }
+        
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            display: none;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            line-height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-top:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        /* 页脚样式 */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: rgba(43, 45, 66, 0.9);
+            padding: 10px 0;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            z-index: 99;
+            backdrop-filter: blur(5px);
+        }
+        
+        footer a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .buttons {
+                width: 100%;
+            }
+            
+            button {
+                flex: 1;
+            }
+            
+            iframe {
+                height: 300px;
+            }
+            
+            .table-container {
+                max-height: 400px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            th, td {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            iframe {
+                height: 250px;
+            }
+            
+            .table-container {
+                max-height: 350px;
+            }
+            
+            button {
+                padding: 0 15px;
+                font-size: 14px;
+            }
+            
+            .result-card {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>幽喵直播点歌抽卡</h1>
+            <p class="subtitle">选择歌单，搜索歌曲，或随机抽取一首</p>
+        </header>
+        
+        <!-- 控制区域 -->
+        <div class="controls">
+            <select id="playlistSelect" onchange="changePlaylist()">
+                <option value="playlist1">古风</option>
+                <option value="playlist2">甜歌</option>
+                <option value="playlist3">致郁</option>
+                <option value="playlist4">治愈</option>
+                <option value="playlist5">原创</option>
+                <option value="playlist6">提督</option>
+                <option value="playlist7" class="secret-option">绝密</option>
+            </select>
+            
+            <input type="text" id="searchInput" placeholder="输入歌名或歌手搜索" oninput="handleSearchInput()">
+            
+            <div class="buttons">
+                <button id="searchBtn" onclick="searchSongs()">
+                    <i class="fas fa-search"></i>
+                    搜索
+                </button>
+                <button id="drawBtn" onclick="drawSong()">
+                    <i class="fas fa-random"></i>
+                    抽取
+                </button>
+            </div>
+        </div>
+        
+        <!-- 直播间 -->
+        <div class="live-container">
+            <iframe src="https://www.bilibili.com/blackboard/live/live-activity-player.html?cid=22621571&quality=0" 
+                    frameborder="0" 
+                    allow="autoplay; encrypted-media" 
+                    allowfullscreen="true">
+            </iframe>
+        </div>
+        
+        <!-- 表格 -->
+        <div class="table-container">
+            <table id="songTable">
+                <thead>
+                    <tr>
+                        <th width="5%">序号</th>
+                        <th width="37.5%">歌名</th>
+                        <th width="37.5%">歌手</th>
+                        <th width="20%">曲风</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 歌曲数据将通过 JavaScript 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 抽取结果卡片 -->
+    <div class="overlay" id="overlay"></div>
+    <div class="result-card" id="resultCard">
+        <h2><i class="fas fa-music"></i> 抽取结果 <i class="fas fa-music"></i></h2>
+        <p><strong>歌名：</strong><span id="resultSongName">歌曲名称</span></p>
+        <p><strong>歌手：</strong><span id="resultArtist">歌手</span></p>
+        <p><strong>曲风：</strong><span id="resultStyle">曲风</span></p>
+        <button class="close-btn" onclick="closeResultCard()">关闭</button>
+    </div>
+    
+    <!-- 回到顶部按钮 -->
+    <div class="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <p>
+            <a href="https://space.bilibili.com/23118401" target="_blank">网站由©苍二君开发所有</a> | 
+            <a href="http://beian.miit.gov.cn" target="_blank">辽ICP备2025050731号</a>
+        </p>
+    </footer>
+
+    <script>
+        // 歌单数据
+        const initialPlaylists = {
+            playlist1: [
+                {name: "醉清风", artist: "弦子", style: "古风" },
+                {name: "轮回之境", artist: "CRITTY", style: "古风" },
+                {name: "遇萤", artist: "CRITTY", style: "古风" },
+                {name: "我的一个道姑朋友", artist: "LON", style: "古风" },
+                {name: "伞下铭", artist: "封茗囧菌", style: "古风", love: true},
+                {name: "金陵谣", artist: "国风堂", style: "古风", love: true},
+                {name: "孽海记", artist: "黄诗扶", style: "古风", love: true},
+                {name: "问风", artist: "金渔", style: "古风", love: true},
+                {name: "繁花尽", artist: "锦零", style: "古风", love: true},
+                {name: "清秋怨", artist: "锦零", style: "古风", love: true},
+                {name: "云归去", artist: "锦零", style: "古风", love: true},
+                {name: "落花成泥", artist: "鞠婧祎", style: "古风", love: true},
+                {name: "海棠", artist: "离殇", style: "古风", love: true},
+                {name: "会开花的云", artist: "王樾安", style: "古风", love: true},
+                {name: "浮光", artist: "周深", style: "古风", love: true},
+                {name: "良辰夜", artist: "黄诗扶", style: "古风", love: true},
+                {name: "梦回花事了", artist: "Lil Yo", style: "古风", love: true},
+            ],
+            playlist2: [
+                {name: "宝贝在干嘛", artist: "KuiKui", style: "甜歌" },
+                {name: "靠近一点点", artist: "Lara梁心颐", style: "甜歌" },
+                {name: "pretty boy", artist: "M2M", style: "甜歌" },
+                {name: "幽喵喵主义", artist: "SHE", style: "甜歌" },
+                {name: "樱花草", artist: "Sweety", style: "甜歌" },
+                {name: "爱心早餐", artist: "Vk、贺子玲", style: "甜歌" },
+                {name: "热爱105°C的你", artist: "阿肆", style: "甜歌" },
+                {name: "呓语", artist: "程嘉敏", style: "甜歌", love: true},
+                {name: "蝴蝶泉边", artist: "黄雅莉", style: "甜歌", love: true},
+                {name: "暗恋", artist: "浣语", style: "甜歌", love: true},
+                {name: "恋爱画板", artist: "锦零", style: "甜歌" },
+                {name: "心引力", artist: "王俊凯、蔡依林", style: "甜歌", love: true},
+                {name: "云淡风轻", artist: "王欣宇", style: "甜歌", love: true},
+                {name: "啊77", artist: "网络歌手", style: "甜歌", love: true},
+            ],
+            playlist3: [
+                {name: "有一种悲伤", artist: "A Lin", style: "致郁" },
+                {name: "嚣张", artist: "en", style: "致郁" },
+                {name: "说散就散", artist: "JC", style: "致郁" },
+                {name: "天灰", artist: "SHE", style: "致郁" },
+                {name: "紫藤花", artist: "SHE", style: "致郁" },
+                {name: "错位时空", artist: "艾辰", style: "致郁" },
+                {name: "是想你的声音啊", artist: "傲七爷", style: "致郁" },
+                {name: "绿色", artist: "陈雪凝", style: "致郁" },
+                {name: "你的酒馆对我打了烊", artist: "陈雪凝", style: "致郁" },
+                {name: "漠河舞厅", artist: "戴羽彤", style: "致郁" },
+                {name: "冬眠", artist: "司南", style: "致郁" },
+                {name: "水星记", artist: "郭顶", style: "致郁" },
+                {name: "父亲", artist: "筷子兄弟", style: "致郁" },
+            ],
+            playlist4: [
+                {name: "永不失联的爱", artist: "周兴哲", style: "治愈" },
+                {name: "笔记", artist: "周笔畅", style: "治愈" },
+                {name: "萱草花", artist: "张小斐", style: "治愈" },
+                {name: "看的最远的地方", artist: "张韶涵", style: "治愈" },
+                {name: "侧脸", artist: "于果", style: "治愈" },
+                {name: "落在生命里的光", artist: "尹昔眠", style: "治愈" },
+                {name: "星辰大海", artist: "黄霄雲", style: "治愈" },
+                {name: "起风了", artist: "阿泱", style: "治愈" },
+                {name: "光年之外", artist: "G.E.M.邓紫棋", style: "治愈" },
+            ],
+            playlist5: [
+                {name: "写满爱", artist: "孙羽幽、心大俊", style: "原创"},
+                {name: "被困疑心岛", artist: "孙羽幽", style: "原创", love:true },
+                {name: "局部有雨", artist: "孙羽幽", style: "原创", love: true },
+                {name: "雪停下来的时候", artist: "孙羽幽", style: "原创", love: true },
+                {name: "遇见晴天", artist: "孙羽幽", style: "原创" },
+                {name: "无法言喻", artist: "孙羽幽", style: "原创 " },
+            ],
+            playlist6: [
+                {name: "七秒钟的记忆", artist: "孙羽幽", style: "提督" },
+                {name: "虐心", artist: "孙羽幽", style: "提督" },
+                {name: "爱殇", artist: "小时姑娘", style: "提督" },
+                {name: "忐忑", artist: "龚琳娜", style: "提督" },
+                {name: "勇气大爆发", artist: "土豆王国乐队", style: "提督" },
+            ], 
+            playlist7: [
+                {name: "好汉歌", artist: "刘欢", style: "绝密" },
+                {name: "让风告诉你", artist: "花玲、喵☆酱 、宴宁 、kinsen", style: "绝密"},
+                {name: "moon halo", artist: "茶理理、TetraCalyx、Hanser", style: "绝密"}
+            ],
+        };
+
+        let currentPlaylist = 'playlist1';
+        let songs = initialPlaylists[currentPlaylist];
+        let searchTimer = null;
+        let isDrawing = false;
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTable();
+            
+            // 设置滚动事件监听器
+            window.addEventListener('scroll', function() {
+                const backToTopButton = document.querySelector('.back-to-top');
+                if (window.scrollY > 300) {
+                    backToTopButton.style.display = "block";
+                } else {
+                    backToTopButton.style.display = "none";
+                }
+            });
+        });
+
+        // 更新表格
+        function updateTable(filteredSongs = songs) {
+            const tableBody = document.querySelector('#songTable tbody');
+            // 使用文档片段减少DOM操作
+            const fragment = document.createDocumentFragment();
+            
+            filteredSongs.forEach((song, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${song.name}</td>
+                    <td>${song.artist}</td>
+                    <td>${song.style}</td>
+                `;
+                
+                // 添加高亮类
+                if (song.love === true) {
+                    row.classList.add('highlight-true');
+                } else if (song.love === false) {
+                    row.classList.add('highlight-false');
+                }
+                
+                fragment.appendChild(row);
+            });
+            
+            // 一次性更新表格
+            tableBody.innerHTML = '';
+            tableBody.appendChild(fragment);
+        }
+
+        // 搜索歌曲
+        function searchSongs() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            
+            if (!query) {
+                updateTable();
+                return;
+            }
+            
+            const filteredSongs = songs.filter(song => 
+                song.name.toLowerCase().includes(query) || 
+                song.artist.toLowerCase().includes(query)
+            );
+            
+            updateTable(filteredSongs);
+        }
+
+        // 输入处理（带防抖）
+        function handleSearchInput() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(searchSongs, 300);
+        }
+
+        // 抽取歌曲
+        function drawSong() {
+            if (isDrawing) return;
+            
+            if (songs.length === 0) {
+                alert('当前歌单为空');
+                return;
+            }
+            
+            isDrawing = true;
+            const drawBtn = document.getElementById('drawBtn');
+            drawBtn.classList.add('drawing-animation');
+            drawBtn.disabled = true;
+            
+            // 模拟抽取过程
+            let counter = 0;
+            const maxIterations = 20;
+            const interval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * songs.length);
+                highlightSong(randomIndex);
+                
+                counter++;
+                if (counter >= maxIterations) {
+                    clearInterval(interval);
+                    const finalIndex = Math.floor(Math.random() * songs.length);
+                    const selectedSong = songs[finalIndex];
+                    
+                    setTimeout(() => {
+                        highlightSong(finalIndex);
+                        showResultCard(selectedSong);
+                        drawBtn.classList.remove('drawing-animation');
+                        drawBtn.disabled = false;
+                        isDrawing = false;
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        // 高亮显示歌曲
+        function highlightSong(index) {
+            const tableBody = document.querySelector('#songTable tbody');
+            const rows = tableBody.querySelectorAll('tr');
+            
+            // 移除之前的高亮
+            rows.forEach(row => {
+                row.classList.remove('highlight-true', 'highlight-false');
+                if (songs[row.rowIndex - 1]?.love === true) {
+                    row.classList.add('highlight-true');
+                } else if (songs[row.rowIndex - 1]?.love === false) {
+                    row.classList.add('highlight-false');
+                }
+            });
+            
+            // 添加当前高亮
+            if (rows[index]) {
+                rows[index].classList.add('highlight-true');
+                
+                // 滚动到高亮行
+                rows[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // 显示结果卡片
+        function showResultCard(song) {
+            document.getElementById('resultSongName').textContent = song.name;
+            document.getElementById('resultArtist').textContent = song.artist;
+            document.getElementById('resultStyle').textContent = song.style;
+            
+            const resultCard = document.getElementById('resultCard');
+            const overlay = document.getElementById('overlay');
+            
+            overlay.classList.add('show');
+            resultCard.classList.add('show');
+        }
+        
+        // 关闭结果卡片
+        function closeResultCard() {
+            const resultCard = document.getElementById('resultCard');
+            const overlay = document.getElementById('overlay');
+            
+            resultCard.classList.remove('show');
+            overlay.classList.remove('show');
+        }
+
+        // 切换歌单
+        function changePlaylist() {
+            const selectedPlaylist = document.getElementById('playlistSelect').value;
+            currentPlaylist = selectedPlaylist;
+            songs = initialPlaylists[selectedPlaylist];
+            updateTable();
+            
+            // 滚动到表格顶部
+            document.querySelector('.table-container').scrollTop = 0;
+        }
+
+        // 回到顶部
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
