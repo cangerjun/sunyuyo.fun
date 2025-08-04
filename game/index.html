@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猜数字游戏</title>
+<style>
+    body { font-family: Arial, sans-serif; }
+    #output { color: red; }
+</style>
+<script>
+var numberToGuess;
+
+function generateNumber() {
+    numberToGuess = Math.floor(Math.random() * 100) + 1;
+}
+
+function checkGuess() {
+    var userGuess = document.getElementById("guess").value;
+    var output = document.getElementById("output");
+
+    if (userGuess == numberToGuess) {
+        output.textContent = "恭喜你！你猜对了！";
+        output.style.color = "green";
+        generateNumber(); // 为下一轮游戏生成新的随机数
+    } else if (userGuess < numberToGuess) {
+        output.textContent = "太低了！再试一次。";
+    } else {
+        output.textContent = "太高了！再试一次。";
+    }
+}
+
+function resetGame() {
+    generateNumber();
+    document.getElementById("guess").value = "";
+    document.getElementById("output").textContent = "";
+}
+
+window.onload = generateNumber; // 页面加载时生成随机数
+</script>
+</head>
+<body>
+<h1>猜数字游戏</h1>
+<p>我已经想好了一个1到100之间的数字。</p>
+<input type="number" id="guess" placeholder="输入你的猜测">
+<button onclick="checkGuess()">提交猜测</button>
+<button onclick="resetGame()">重新开始</button>
+<p id="output"></p>
+</body>
+</html>
