@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幽喵直播点歌抽卡系统 - 曲风筛选</title>
+    <title>幽喵直播点歌抽卡系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 全局样式 */
@@ -18,6 +18,7 @@
             --secret-color: #a0a0a0;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             --gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --nav-bg: rgba(43, 45, 66, 0.95);
         }
         
         * {
@@ -37,16 +38,54 @@
             background-attachment: fixed;
         }
         
+        /* 智能隐藏导航样式 */
+        .smart-nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: var(--nav-bg);
+            backdrop-filter: blur(5px);
+            border-radius: 0 0 0 15px;
+            padding: 8px 20px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+            transition: transform 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .smart-nav.hidden {
+            transform: translateY(-100%);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
         /* 容器样式 */
         .container {
             max-width: 1200px;
             width: 95%;
-            margin: 20px auto;
+            margin: 0 auto 40px;
             padding: 25px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
+            margin-top: 20px;
         }
         
         /* 头部样式 */
@@ -57,7 +96,7 @@
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             color: var(--primary);
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -123,13 +162,6 @@
             background-repeat: no-repeat;
             background-position: 15px center;
             background-size: 20px;
-        }
-        
-        /* 绝密选项样式 */
-        .secret-option {
-            color: var(--secret-color);
-            font-style: italic;
-            opacity: 0.7;
         }
         
         .buttons {
@@ -349,7 +381,7 @@
         /* 回到顶部按钮 */
         .back-to-top {
             position: fixed;
-            bottom: 90px;
+            bottom: 30px;
             right: 30px;
             display: none;
             width: 50px;
@@ -372,18 +404,15 @@
         
         /* 页脚样式 */
         footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
             width: 100%;
-            height: 50px;
+            height: auto;
             background: rgba(43, 45, 66, 0.9);
-            padding: 10px 0;
+            padding: 15px 0;
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
-            z-index: 99;
-            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            margin-top: 20px;
         }
         
         footer a {
@@ -421,12 +450,22 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             th, td {
                 padding: 12px 8px;
                 font-size: 14px;
+            }
+            
+            .smart-nav {
+                gap: 10px;
+                padding: 6px 15px;
+            }
+            
+            .nav-link {
+                font-size: 0.75rem;
+                padding: 3px 6px;
             }
         }
         
@@ -452,6 +491,15 @@
                 width: 90%;
                 padding: 20px;
             }
+            
+            .smart-nav {
+                gap: 8px;
+                padding: 5px 10px;
+            }
+            
+            .nav-link {
+                font-size: 0.7rem;
+            }
         }
         
         .stats-bar {
@@ -471,9 +519,38 @@
             background: rgba(255, 255, 255, 0.2);
             margin: 5px;
         }
+        
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--dark);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg) scale(1.1);
+        }
     </style>
 </head>
 <body>
+    <!-- 智能隐藏导航 -->
+    <div class="smart-nav" id="smartNav">
+        <a href="https://sunyuyo.fun/shadow/" class="nav-link">绝对领域</a>
+        <a href="https://live.bilibili.com/25816719" class="nav-link">直播间</a>
+    </div>
+    
     <div class="container">
         <header>
             <h1>幽喵直播点歌抽卡</h1>
@@ -484,15 +561,7 @@
         <div class="controls">
             <!-- 曲风筛选下拉框 -->
             <select id="styleFilter" onchange="filterByStyle()">
-                <option value="all">全部歌曲</option>
-                <option value="古风">古风</option>
-                <option value="甜歌">甜歌</option>
-                <option value="致郁">致郁</option>
-                <option value="治愈">治愈</option>
-                <option value="情歌">情歌</option>
-                <option value="原创">原创</option>
-                <option value="提督">提督</option>
-                <option value="绝密">绝密</option>
+                <option value="all">所有曲风</option>
             </select>
             
             <input type="text" id="searchInput" placeholder="输入歌名或歌手搜索" oninput="handleSearchInput()">
@@ -541,6 +610,14 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- 页脚 -->
+        <footer>
+            <p>
+                <a href="https://space.bilibili.com/23118401" target="_blank">网站由©苍二君开发所有</a> | 
+                <a href="http://beian.miit.gov.cn" target="_blank">辽ICP备2025050731号</a>
+            </p>
+        </footer>
     </div>
     
     <!-- 抽取结果卡片 -->
@@ -556,13 +633,10 @@
     <!-- 回到顶部按钮 -->
     <div class="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></div>
     
-    <!-- 页脚 -->
-    <footer>
-        <p>
-            <a href="https://space.bilibili.com/23118401" target="_blank">网站由©苍二君开发所有</a> | 
-            <a href="http://beian.miit.gov.cn" target="_blank">辽ICP备2025050731号</a>
-        </p>
-    </footer>
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
     
     <script>
         // 歌曲数据
@@ -1213,6 +1287,8 @@
                 {name: "茫", artist: "李润祺", style: "致郁", love: null},
                 {name: "我们的纪念", artist: "李雅微", style: "致郁", love: null},
                 {name: "雨蝴", artist: "李翊君", style: "致郁", love: null},
+                {name: "时间都去哪了(半会)", artist: "王铮亮", style: "致郁", love: null},
+                {name: "愿得一人心(半会)", artist: "李行亮", style: "致郁", love: null},
                 {name: "分手快乐", artist: "梁静茹", style: "致郁", love: null},
                 {name: "给未来的自己", artist: "梁静茹", style: "致郁", love: null},
                 {name: "没有人像你", artist: "梁静茹", style: "致郁", love: null},
@@ -1325,6 +1401,7 @@
                 {name: "第三天", artist: "谢雨欣", style: "致郁", love: null},
                 {name: "谁", artist: "谢雨欣", style: "致郁", love: null},
                 {name: "纷飞", artist: "徐怀钰", style: "致郁", love: null},
+                {name: "踏浪", artist: "徐怀钰", style: "甜歌", love: null},
                 {name: "失落沙洲", artist: "徐佳莹", style: "致郁", love: null},
                 {name: "红妆", artist: "徐良", style: "致郁", love: null},
                 {name: "即使说抱歉", artist: "徐良", style: "致郁", love: null},
@@ -1677,10 +1754,6 @@
                 {name: "黑色的伞", artist: "孙羽幽", style: "原创", love: null},
                 {name: "黄昏的海", artist:"孙羽幽", style: "原创", love: null},
                 {name: "今天", artist: "孙羽幽", style: "原创", love: null},
-                {name: "爱河插电(总能有的)", artist: "蒋雪儿", style: "绝密", love: null},
-                {name: "好汉歌(唱过有切片)", artist: "刘欢", style: "绝密", love: null },
-                {name: "让风告诉你(学了两年)", artist: "花玲、喵☆酱 、宴宁 、kinsen", style: "绝密", love: null},
-                {name: "moon halo(直播是跟乐唱过)", artist: "茶理理、TetraCalyx、Hanser", style: "绝密", love: null},
                 {name: "默画", artist: "孙羽幽", style: "原创", love: null},
                 {name: "奇了怪", artist: "孙羽幽", style: "原创", love: null},
                 {name: "三行情书", artist: "孙羽幽", style: "原创", love: null},
@@ -1742,9 +1815,11 @@
         let searchTimer = null;
         let isDrawing = false;
         let currentStyle = 'all'; // 当前选中的曲风
+        let lastScrollTop = 0;
 
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
+            populateStyleFilter();
             updateTable();
             updateStats();
             
@@ -1756,8 +1831,38 @@
                 } else {
                     backToTopButton.style.display = "none";
                 }
+                
+                // 导航栏智能隐藏
+                const nav = document.getElementById('smartNav');
+                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
+                    // 向下滚动并且超过100px时隐藏
+                    nav.classList.add('hidden');
+                } else {
+                    // 向上滚动时显示
+                    nav.classList.remove('hidden');
+                }
+                
+                lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
             });
         });
+
+        // 填充曲风筛选选项
+        function populateStyleFilter() {
+            const styleFilter = document.getElementById('styleFilter');
+            
+            // 获取所有曲风
+            const styles = [...new Set(songs.map(song => song.style))];
+            
+            // 添加曲风选项
+            styles.forEach(style => {
+                const option = document.createElement('option');
+                option.value = style;
+                option.textContent = style;
+                styleFilter.appendChild(option);
+            });
+        }
 
         // 更新表格
         function updateTable(filteredSongs = songs) {
@@ -1797,16 +1902,8 @@
             document.getElementById('currentSongs').textContent = filteredSongs.length;
             
             const styleName = {
-                'all': '全部',
-                '古风': '古风',
-                '甜歌': '甜歌',
-                '致郁': '致郁',
-                '治愈': '治愈',
-                '情歌': '情歌',
-                '原创': '原创',
-                '提督': '提督',
-                '绝密': '绝密'
-            }[currentStyle];
+                'all': '全部'
+            }[currentStyle] || currentStyle;
             
             document.getElementById('currentStyle').textContent = styleName;
         }
@@ -1959,6 +2056,26 @@
                 top: 0,
                 behavior: 'smooth'
             });
+        }
+        
+        // 主题切换功能
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.classList.toggle('dark-theme');
+            
+            // 更新按钮图标
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            
+            // 保存主题偏好
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        
+        // 检查保存的主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.querySelector('.theme-toggle i').className = 'fas fa-sun';
         }
     </script>
 </body>
