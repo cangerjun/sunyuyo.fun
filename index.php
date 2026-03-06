@@ -38,25 +38,32 @@
             background-attachment: fixed;
         }
         
-        /* 智能隐藏导航样式 */
+        /* 右侧隐藏导航样式 */
         .smart-nav {
             position: fixed;
-            top: 0;
+            top: 50%;
             right: 0;
+            transform: translateY(-50%);
             background: var(--nav-bg);
             backdrop-filter: blur(5px);
-            border-radius: 0 0 0 15px;
-            padding: 8px 20px;
+            border-radius: 15px 0 0 15px;
+            padding: 15px 5px;
             box-shadow: var(--shadow);
             z-index: 1000;
             display: flex;
+            flex-direction: column;
             gap: 20px;
-            transition: transform 0.3s ease;
-            transform: translateY(0);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            width: 50px;
+            overflow: hidden;
+            opacity: 0.7;
         }
         
-        .smart-nav.hidden {
-            transform: translateY(-100%);
+        .smart-nav:hover {
+            width: auto;
+            transform: translateY(-50%) translateX(0);
+            opacity: 1;
+            padding: 15px 15px 15px 10px;
         }
         
         .nav-link {
@@ -64,15 +71,33 @@
             font-size: 0.85rem;
             text-decoration: none;
             transition: all 0.3s ease;
-            padding: 4px 8px;
+            padding: 8px 12px;
             border-radius: 8px;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-link i {
+            min-width: 20px;
+            text-align: center;
         }
         
         .nav-link:hover {
             color: white;
             background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            transform: translateX(-5px);
+        }
+        
+        .nav-text {
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+            white-space: nowrap;
+        }
+        
+        .smart-nav:hover .nav-text {
+            opacity: 1;
         }
         
         /* 容器样式 */
@@ -459,13 +484,41 @@
             }
             
             .smart-nav {
-                gap: 10px;
-                padding: 6px 15px;
+                top: auto;
+                bottom: 0;
+                transform: none;
+                flex-direction: row;
+                width: 100%;
+                height: 50px;
+                border-radius: 15px 15px 0 0;
+                padding: 5px;
+                opacity: 0.9;
+            }
+            
+            .smart-nav:hover {
+                height: auto;
+                width: 100%;
+                transform: none;
+                padding: 10px;
             }
             
             .nav-link {
-                font-size: 0.75rem;
-                padding: 3px 6px;
+                flex-direction: column;
+                font-size: 0.7rem;
+                padding: 5px;
+                gap: 5px;
+            }
+            
+            .nav-link i {
+                font-size: 1.1rem;
+            }
+            
+            .nav-text {
+                display: none;
+            }
+            
+            .smart-nav:hover .nav-text {
+                display: block;
             }
         }
         
@@ -490,15 +543,6 @@
             .result-card {
                 width: 90%;
                 padding: 20px;
-            }
-            
-            .smart-nav {
-                gap: 8px;
-                padding: 5px 10px;
-            }
-            
-            .nav-link {
-                font-size: 0.7rem;
             }
         }
         
@@ -545,10 +589,33 @@
     </style>
 </head>
 <body>
-    <!-- 智能隐藏导航 -->
+    <img src="/ip_log.php" width="1" height="1" alt="" style="display:none" />
+    <!-- 右侧隐藏导航 -->
     <div class="smart-nav" id="smartNav">
-        <a href="https://sunyuyo.fun/shadow/" class="nav-link">绝对领域</a>
-        <a href="https://live.bilibili.com/25816719" class="nav-link">直播间</a>
+        <a href="https://www.sunyuyo.fun/shadow/" class="nav-link">
+            <i class="fas fa-fantasy-flight-glasses"></i>
+            <span class="nav-text">绝对领域</span>
+        </a>
+        <a href="https://music.sunyuyo.fun/genshin/" class="nav-link">
+            <i class="fas fa-music"></i>
+            <span class="nav-text">去弹原琴</span>
+        </a>
+        <a href="https://www.sunyuyo.fun/" class="nav-link">
+            <i class="fas fa-history"></i>
+            <span class="nav-text">回到新版</span>
+        </a>
+        <a href="https://www.sunyuyo.fun/game/" class="nav-link">
+            <i class="fas fa-gamepad"></i>
+            <span class="nav-text">玩个游戏</span>
+        </a>
+        <a href="https://live.bilibili.com/22621571" class="nav-link">
+            <i class="fas fa-video"></i>
+            <span class="nav-text">直播间</span>
+        </a>
+        <a href="https://ai.sunyuyo.fun.com/" class="nav-link">
+            <i class="fas fa-video"></i>
+            <span class="nav-text">直播间</span>
+        </a>
     </div>
     
     <div class="container">
@@ -614,8 +681,11 @@
         <!-- 页脚 -->
         <footer>
             <p>
-                <a href="https://space.bilibili.com/23118401" target="_blank">网站由©苍二君开发所有</a> | 
-                <a href="http://beian.miit.gov.cn" target="_blank">辽ICP备2025050731号</a>
+                <a href="https://space.bilibili.com/23118401" target="_blank">版权声明：©2025 苍二君版权所有</a> | 
+                开源声明：本站模板采用 MIT 协议开源（需保留页脚署名）<a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>
+            </p>
+            <p>
+                备案信息：<a href="http://beian.miit.gov.cn" target="_blank">辽ICP备2025050731号</a>
             </p>
         </footer>
     </div>
@@ -993,107 +1063,117 @@
                 {name: "不得不爱", artist: "潘玮柏、弦子", style: "甜歌", love: null},
                 {name: "月亮代表我的心", artist: "齐秦", style: "甜歌", love: null},
                 {name: "粘人精", artist: "圈9", style: "甜歌", love: null},
-                {name: "我要你", artist: "任素汐", style: "甜歌", love: null},
-                {name: "花好月圆", artist: "任贤齐", style: "甜歌", love: false},
-                {name: "这就是爱吗", artist: "容祖儿", style: "甜歌", love: null},
-                {name: "想和你迎着台风去看海", artist: "桑拿猫黑糖/洛天依", style: "甜歌", love: null},
-                {name: "失眠飞行", artist: "沈以诚", style: "甜歌", love: null},
-                {name: "小冤家", artist: "苏三", style: "甜歌", love: null},
-                {name: "勾勾手", artist: "孙羽幽", style: "甜歌", love: null},
-                {name: "两只老虎", artist: "孙羽幽", style: "甜歌", love: null},
-                {name: "一点点温柔", artist: "孙羽幽", style: "甜歌", love: null},
-                {name: "不会分手的恋人", artist: "孙羽幽、阿庆", style: "甜歌", love: null},
-                {name: "大猪蹄子", artist: "孙紫涵", style: "甜歌", love: null},
-                {name: "门没锁", artist: "唐筱优", style: "甜歌", love: null},
-                {name: "深夜地下铁", artist: "陶钰玉", style: "甜歌", love: null},
-                {name: "爱很简单", artist: "陶喆", style: "甜歌", love: null},
-                {name: "就是爱你", artist: "陶喆", style: "甜歌", love: null},
-                {name: "今天你要嫁给我", artist: "陶喆、蔡依林", style: "甜歌", love: null},
-                {name: "多莉宝贝", artist: "童可可", style: "甜歌", love: null},
-                {name: "怪我咯", artist: "童可可", style: "甜歌", love: null},
-                {name: "萌二代", artist: "童可可", style: "甜歌", love: null},
-                {name: "萌萌哒", artist: "童可可", style: "甜歌", love: null},
-                {name: "不分手的恋爱", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "吵架歌", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "万有引力", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "唯你懂我心", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "小星星", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "一笑倾城", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "有点甜", artist: "汪苏泷", style: "甜歌", love: null},
-                {name: "去年夏天", artist: "王大毛", style: "甜歌", love: null},
-                {name: "心引力", artist: "王俊凯、蔡依林", style: "甜歌", love: true},
-                {name: "我多喜欢你你会知道", artist: "王俊琪", style: "甜歌", love: null},
-                {name: "公转自转", artist: "王力宏", style: "甜歌", love: null},
-                {name: "唯一", artist: "王力宏", style: "甜歌", love: null},
-                {name: "星座", artist: "王力宏", style: "甜歌", love: null},
-                {name: "确定一定以及肯定", artist: "王水洋", style: "甜歌", love: null},
-                {name: "da da da", artist: "王心凌", style: "甜歌", love: null},
-                {name: "I Do", artist: "王心凌", style: "甜歌", love: null},
-                {name: "爱你", artist: "王心凌", style: "甜歌", love: null},
-                {name: "爱情加油", artist: "王心凌", style: "甜歌", love: null},
-                {name: "月光", artist: "王心凌", style: "甜歌", love: null},
-                {name: "哥本哈根的童话", artist: "王心如", style: "甜歌", love: null},
-                {name: "云淡风轻", artist: "王欣宇", style: "甜歌", love: true},
-                {name: "爱情错觉", artist: "王娅", style: "甜歌", love: null},
-                {name: "Everything sucks哈喽你好", artist: "王玉萌", style: "甜歌", love: null},
-                {name: "苹果与蝴蝶", artist: "王筝", style: "甜歌", love: null},
-                {name: "啊77", artist: "网络歌手", style: "甜歌", love: true},
-                {name: "大黄老鼠皮卡丘", artist: "网络歌手", style: "甜歌", love: null},
-                {name: "广角美女", artist: "温岚", style: "甜歌", love: null},
-                {name: "突然好想你", artist: "五月天", style: "甜歌", love: null},
-                {name: "私奔到月球", artist: "五月天、陈绮贞", style: "甜歌", love: null},
-                {name: "爱你爱到死", artist: "夏宇童", style: "甜歌", love: null},
-                {name: "爱的魔法", artist: "夏雨桐", style: "甜歌", love: null},
-                {name: "非你不爱", artist: "弦子", style: "甜歌", love: null},
-                {name: "看走眼", artist: "弦子", style: "甜歌", love: null},
-                {name: "老鼠爱大米", artist: "香香", style: "甜歌", love: null},
-                {name: "猪之歌", artist: "香香", style: "甜歌", love: null},
-                {name: "爱情通关密语", artist: "萧亚轩", style: "甜歌", love: null},
-                {name: "潇洒小姐", artist: "萧亚轩", style: "甜歌", love: null},
-                {name: "目极皆是你", artist: "小F4", style: "甜歌", love: null},
-                {name: "学猫叫", artist: "小峰峰", style: "甜歌", love: null},
-                {name: "专属电影", artist: "小贱", style: "甜歌", love: null},
-                {name: "从热恋到永远", artist: "小可乐", style: "甜歌", love: null},
-                {name: "想对你说", artist: "小潘潘", style: "甜歌", love: null},
-                {name: "眼睛", artist: "小潘潘", style: "甜歌", love: null},
-                {name: "死性不改", artist: "小柔小姐", style: "甜歌", love: null},
-                {name: "晚安晚安", artist: "小三金", style: "甜歌", love: null},
-                {name: "小跳蛙", artist: "小斯", style: "甜歌", love: null},
-                {name: "山妖", artist: "小星星", style: "甜歌", love: true},
-                {name: "你是我的bsby boy", artist: "小佑", style: "甜歌", love: null},
-                {name: "格斗宝贝", artist: "小缘", style: "甜歌", love: null},
-                {name: "猪头哥哥", artist: "肖小胖", style: "甜歌", love: null},
-                {name: "带你去旅行", artist: "校长", style: "甜歌", love: null},
-                {name: "所念皆星河", artist: "欣然", style: "甜歌", love: null},
-                {name: "123我爱你", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "草莓圣代", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "大神带带我", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "好像恋爱了", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "每一句都很甜", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "巧克力", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "未来旅行", artist: "新乐尘符", style: "甜歌", love: null},
-                {name: "青柠", artist: "徐秉龙、桃十五", style: "甜歌", love: null},
-                {name: "I Wanna Be With You", artist: "徐洁儿", style: "甜歌", love: null},
-                {name: "飞机场", artist: "徐良", style: "甜歌", love: null},
-                {name: "创作者", artist: "徐良/本兮", style: "甜歌", love: null},
-                {name: "星座恋人", artist: "徐良/吴昕", style: "甜歌", love: null},
-                {name: "小雨天气", artist: "徐梦圆", style: "甜歌", love: null},
-                {name: "恒星", artist: "许茹芸", style: "甜歌", love: null},
-                {name: "云且留住", artist: "许茹芸", style: "甜歌", love: true},
-                {name: "惊鸿一面", artist: "许嵩", style: "甜歌", love: null},
-                {name: "你若成风", artist: "许嵩", style: "甜歌", love: null},
-                {name: "素颜", artist: "许嵩", style: "甜歌", love: null},
-                {name: "温泉", artist: "许嵩", style: "甜歌", love: null},
-                {name: "我乐意", artist: "许嵩", style: "甜歌", love: true},
-                {name: "祝你爱我到天荒地老", artist: "颜人中", style: "甜歌", love: null},
-                {name: "如果我可以把你忘记", artist: "颜小健", style: "甜歌", love: null},
-                {name: "芥末巧克力", artist: "杨丞琳", style: "甜歌", love: null},
-                {name: "理想情人", artist: "杨丞琳", style: "甜歌", love: null},
-                {name: "庆祝", artist: "杨丞琳", style: "甜歌", love: null},
-                {name: "缺氧", artist: "杨丞琳", style: "甜歌", love: null},
-                {name: "牛奶面包", artist: "杨紫", style: "甜歌", love: null},
-                {name: "十九岁的一天", artist: "杨紫怡", style: "甜歌", love: null},
-                {name: "好想要牵你的手", artist: "一口甜", style: "甜歌", love: null},
+                {name: "飞机", artist: "任然", style: "甜歌", love: null},
+                {name: "飞鸟与蝉", artist: "任然", style: "甜歌", love: null},
+                {name: "后继者", artist: "任然", style: "甜歌", love: null},
+                {name: "空空如也", artist: "任然", style: "甜歌", love: null},
+                {name: "无人之岛", artist: "任然", style: "甜歌", love: null},
+                {name: "风筝，飞鸟", artist: "任舒瞳", style: "甜歌", love: null},
+                {name: "暗香", artist: "沙宝高", style: "甜歌", love: null},
+                {name: "如果爱能早些说出来", artist: "山野", style: "甜歌", love: null},
+                {name: "爱河", artist: "神马乐团", style: "甜歌", love: null},
+                {name: "冬眠", artist: "司南", style: "甜歌", love: null},
+                {name: "忘却", artist: "苏琛", style: "甜歌", love: null},
+                {name: "我还能抱你吗", artist: "苏二零", style: "甜歌", love: null},
+                {name: "离岸", artist: "苏晗", style: "甜歌", love: null},
+                {name: "爱如空气", artist: "孙俪", style: "甜歌", love: null},
+                {name: "我不难过", artist: "孙燕姿", style: "甜歌", love: null},
+                {name: "不同世界", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "蝶", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "回来好吗", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "前任身份", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "危险表演", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "要有一点点想我", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "蛹", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "这该死的异地恋", artist: "孙羽幽", style: "甜歌", love: null},
+                {name: "害怕爱你", artist: "孙羽幽、心大俊", style: "甜歌", love: null},
+                {name: "你会不会怪我", artist: "孙羽幽、心大俊", style: "甜歌", love: null},
+                {name: "雪落下的声音", artist: "谭维维", style: "甜歌", love: null},
+                {name: "无名指的等待", artist: "谭欣懿", style: "甜歌", love: null},
+                {name: "我不知道", artist: "唐笑", style: "甜歌", love: null},
+                {name: "寂寞的季节", artist: "陶喆", style: "甜歌", love: null},
+                {name: "你就不要想起我", artist: "田馥甄", style: "甜歌", love: null},
+                {name: "一个人也能好好过", artist: "童可可", style: "甜歌", love: null},
+                {name: "yes周杰伦", artist: "荼靡", style: "甜歌", love: null},
+                {name: "新不了情", artist: "万芳", style: "甜歌", love: null},
+                {name: "巴赫旧约", artist: "汪苏泷", style: "甜歌", love: null},
+                {name: "风度", artist: "汪苏泷", style: "甜歌", love: null},
+                {name: "他的爱", artist: "汪苏泷", style: "甜歌", love: null},
+                {name: "像鱼", artist: "王贰浪", style: "甜歌", love: null},
+                {name: "飞蛾扑火", artist: "王键", style: "甜歌", love: null},
+                {name: "沦陷", artist: "王靖雯", style: "甜歌", love: null},
+                {name: "爱我不要丢下我", artist: "王思思", style: "甜歌", love: null},
+                {name: "我真的受伤了", artist: "王菀之", style: "甜歌", love: null},
+                {name: "爱的天国", artist: "王心凌", style: "甜歌", love: null},
+                {name: "花的嫁衣", artist: "王心凌", style: "甜歌", love: null},
+                {name: "明天见", artist: "王心凌", style: "甜歌", love: null},
+                {name: "忘了我也不错", artist: "王心凌", style: "甜歌", love: null},
+                {name: "我会好好的", artist: "王心凌", style: "甜歌", love: null},
+                {name: "原谅", artist: "王玉华", style: "甜歌", love: null},
+                {name: "三妻四妾", artist: "王媛渊", style: "甜歌", love: null},
+                {name: "恋人心", artist: "魏新雨", style: "甜歌", love: null},
+                {name: "夏天的风", artist: "温岚", style: "甜歌", love: null},
+                {name: "你不是真正的快乐", artist: "五月天", style: "甜歌", love: null},
+                {name: "习惯", artist: "夏婉安", style: "甜歌", love: null},
+                {name: "第三者的第三者", artist: "弦子", style: "甜歌", love: null},
+                {name: "舍不得", artist: "弦子", style: "甜歌", love: null},
+                {name: "天真", artist: "弦子", style: "甜歌", love: null},
+                {name: "命运", artist: "香香", style: "甜歌", love: null},
+                {name: "对不起我爱你", artist: "萧萧", style: "甜歌", love: null},
+                {name: "握不住的他", artist: "萧萧", style: "甜歌", love: null},
+                {name: "怎么办我爱你", artist: "萧萧", style: "甜歌", love: null},
+                {name: "错的人", artist: "萧亚轩", style: "甜歌", love: null},
+                {name: "类似爱情", artist: "萧亚轩", style: "甜歌", love: null},
+                {name: "突然想起你", artist: "萧亚轩", style: "甜歌", love: null},
+                {name: "从前说", artist: "小阿七", style: "甜歌", love: null},
+                {name: "烟雨蒙蒙", artist: "小堇色", style: "甜歌", love: null},
+                {name: "我怕来者不是你", artist: "小蓝背心", style: "甜歌", love: null},
+                {name: "发呆", artist: "小楠楠", style: "甜歌", love: null},
+                {name: "让心跳停了", artist: "小暖", style: "甜歌", love: null},
+                {name: "还想听你的故事", artist: "谢春花、王碧浪", style: "甜歌", love: null},
+                {name: "第三天", artist: "谢雨欣", style: "甜歌", love: null},
+                {name: "谁", artist: "谢雨欣", style: "甜歌", love: null},
+                {name: "纷飞", artist: "徐怀钰", style: "甜歌", love: null},
+                {name: "踏浪", artist: "徐怀钰", style: "甜歌", love: null},
+                {name: "失落沙洲", artist: "徐佳莹", style: "甜歌", love: null},
+                {name: "红妆", artist: "徐良", style: "甜歌", love: null},
+                {name: "即使说抱歉", artist: "徐良", style: "甜歌", love: null},
+                {name: "女骑士", artist: "徐良", style: "甜歌", love: null},
+                {name: "天真", artist: "徐良", style: "甜歌", love: null},
+                {name: "无颜女", artist: "徐良", style: "甜歌", love: null},
+                {name: "抽离", artist: "徐良、刘丹萌", style: "甜歌", love: null},
+                {name: "爱笑的眼睛", artist: "徐若瑄", style: "甜歌", love: null},
+                {name: "七月七日晴", artist: "许慧欣", style: "甜歌", love: null},
+                {name: "不爱我放了我", artist: "许茹芸", style: "甜歌", love: null},
+                {name: "好听", artist: "许茹芸", style: "甜歌", love: null},
+                {name: "如果云知道", artist: "许茹芸", style: "甜歌", love: null},
+                {name: "不煽情", artist: "许嵩", style: "甜歌", love: null},
+                {name: "幻听", artist: "许嵩", style: "甜歌", love: null},
+                {name: "灰色头像", artist: "许嵩", style: "甜歌", love: null},
+                {name: "庐州月", artist: "许嵩", style: "甜歌", love: null},
+                {name: "清明雨上", artist: "许嵩", style: "甜歌", love: null},
+                {name: "如果当时", artist: "许嵩", style: "甜歌", love: null},
+                {name: "丑八怪", artist: "薛之谦", style: "甜歌", love: null},
+                {name: "其实", artist: "薛之谦", style: "甜歌", love: null},
+                {name: "认真的雪", artist: "薛之谦", style: "甜歌", love: null},
+                {name: "演员", artist: "薛之谦", style: "甜歌", love: null},
+                {name: "三寸天堂", artist: "严艺丹", style: "甜歌", love: null},
+                {name: "傻孩子", artist: "阎韦伶", style: "甜歌", love: null},
+                {name: "我是个傻瓜", artist: "颜小健", style: "甜歌", love: null},
+                {name: "暧昧", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "带我走", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "过敏", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "倔强", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "可爱", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "少年维特的烦恼", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "失眠的睡美人", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "雨爱", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "在你怀里微笑", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "找不到", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "左边", artist: "杨丞琳", style: "甜歌", love: null},
+                {name: "值得", artist: "叶倩文", style: "甜歌", love: null},
+                {name: "相念于心", artist: "叶炫清", style: "甜歌", love: null},
+                {name: "慢慢等", artist: "一口甜", style: "甜歌", love: null},
                 {name: "麋鹿森林", artist: "一口甜", style: "甜歌", love: null},
                 {name: "文字游戏", artist: "一口甜", style: "甜歌", love: null},
                 {name: "喜欢你", artist: "一口甜", style: "甜歌", love: null},
@@ -1401,7 +1481,6 @@
                 {name: "第三天", artist: "谢雨欣", style: "致郁", love: null},
                 {name: "谁", artist: "谢雨欣", style: "致郁", love: null},
                 {name: "纷飞", artist: "徐怀钰", style: "致郁", love: null},
-                {name: "踏浪", artist: "徐怀钰", style: "甜歌", love: null},
                 {name: "失落沙洲", artist: "徐佳莹", style: "致郁", love: null},
                 {name: "红妆", artist: "徐良", style: "致郁", love: null},
                 {name: "即使说抱歉", artist: "徐良", style: "致郁", love: null},
@@ -1448,232 +1527,67 @@
                 {name: "那又如何", artist: "应嘉俐", style: "致郁", love: null},
                 {name: "穷极一生到不了的天堂", artist: "于潼", style: "致郁", love: null},
                 {name: "体面", artist: "于文文", style: "致郁", love: null},
-                {name: "朋友们都结婚去了", artist: "宇衡", style: "致郁", love: null},
-                {name: "时间煮雨", artist: "郁可唯", style: "致郁", love: null},
-                {name: "指望", artist: "郁可唯", style: "致郁", love: null},
-                {name: "绿袖子", artist: "元若蓝", style: "致郁", love: null},
-                {name: "想我了吗", artist: "袁成杰", style: "致郁", love: null},
-                {name: "旅行中忘记", artist: "袁娅维", style: "致郁", love: null},
-                {name: "心语心愿", artist: "张柏芝", style: "致郁", love: null},
-                {name: "拾忆", artist: "张翰", style: "致郁", love: null},
-                {name: "honey money", artist: "张惠春", style: "致郁", love: null},
-                {name: "记得", artist: "张惠妹", style: "致郁", love: null},
-                {name: "如果你也听说", artist: "张惠妹", style: "致郁", love: null},
-                {name: "听海", artist: "张惠妹", style: "致郁", love: null},
-                {name: "云中的angel", artist: "张杰", style: "致郁", love: null},
-                {name: "画心", artist: "张靓颖", style: "致郁", love: null},
-                {name: "来不及说爱你", artist: "张靓颖", style: "致郁", love: null},
-                {name: "如果爱下去", artist: "张靓颖", style: "致郁", love: null},
-                {name: "天下无双", artist: "张靓颖", style: "致郁", love: null},
-                {name: "爱的旅程", artist: "张韶涵", style: "致郁", love: null},
-                {name: "复活节", artist: "张韶涵", style: "致郁", love: null},
-                {name: "偶尔", artist: "张韶涵", style: "致郁", love: null},
-                {name: "亲爱的那不是爱情", artist: "张韶涵", style: "致郁", love: null},
-                {name: "我的最爱", artist: "张韶涵", style: "致郁", love: null},
-                {name: "遗失的美好", artist: "张韶涵", style: "致郁", love: null},
-                {name: "过火", artist: "张信哲", style: "致郁", love: null},
-                {name: "信仰", artist: "张信哲", style: "致郁", love: null},
-                {name: "我是真的受伤了", artist: "张学友", style: "致郁", love: null},
-                {name: "只是太爱你", artist: "赵大紫", style: "致郁", love: null},
-                {name: "尽头", artist: "赵方婧", style: "致郁", love: null},
-                {name: "最初的温柔", artist: "赵乃吉", style: "致郁", love: null},
-                {name: "离别的车站", artist: "赵薇", style: "致郁", love: null},
-                {name: "分手假期", artist: "钟洁", style: "致郁", love: null},
-                {name: "season", artist: "周笔畅", style: "致郁", love: null},
-                {name: "冬天的私密", artist: "周传雄", style: "致郁", love: null},
-                {name: "风铃", artist: "周惠", style: "致郁", love: null},
-                {name: "预言", artist: "周惠", style: "致郁", love: null},
-                {name: "爱情悬崖", artist: "周杰伦", style: "致郁", love: null},
-                {name: "安静", artist: "周杰伦", style: "致郁", love: null},
-                {name: "暗号", artist: "周杰伦", style: "致郁", love: null},
-                {name: "白色风车", artist: "周杰伦", style: "致郁", love: null},
-                {name: "半岛铁盒", artist: "周杰伦", style: "致郁", love: null},
-                {name: "不能说的秘密", artist: "周杰伦", style: "致郁", love: null},
-                {name: "彩虹", artist: "周杰伦", style: "致郁", love: null},
-                {name: "稻香", artist: "周杰伦", style: "致郁", love: null},
-                {name: "等你下课", artist: "周杰伦", style: "致郁", love: null},
-                {name: "断了的弦", artist: "周杰伦", style: "致郁", love: null},
-                {name: "反方向的钟", artist: "周杰伦", style: "致郁", love: null},
-                {name: "枫", artist: "周杰伦", style: "致郁", love: null},
-                {name: "搁浅", artist: "周杰伦", style: "致郁", love: null},
-                {name: "给我一首歌的时间", artist: "周杰伦", style: "致郁", love: null},
-                {name: "轨迹", artist: "周杰伦", style: "致郁", love: null},
-                {name: "黑色毛衣", artist: "周杰伦", style: "致郁", love: null},
-                {name: "黑色幽默", artist: "周杰伦", style: "致郁", love: null},
-                {name: "花海", artist: "周杰伦", style: "致郁", love: null},
-                {name: "回到过去", artist: "周杰伦", style: "致郁", love: null},
-                {name: "开不了口", artist: "周杰伦", style: "致郁", love: null},
-                {name: "龙卷风", artist: "周杰伦", style: "致郁", love: null},
-                {name: "明明就", artist: "周杰伦", style: "致郁", love: null},
-                {name: "蒲公英的约定", artist: "周杰伦", style: "致郁", love: null},
-                {name: "晴天", artist: "周杰伦", style: "致郁", love: null},
-                {name: "珊瑚海", artist: "周杰伦", style: "致郁", love: null},
-                {name: "世界末日", artist: "周杰伦", style: "致郁", love: null},
-                {name: "手写的从前", artist: "周杰伦", style: "致郁", love: null},
-                {name: "说好的幸福呢", artist: "周杰伦", style: "致郁", love: null},
-                {name: "退后", artist: "周杰伦", style: "致郁", love: null},
-                {name: "我不配", artist: "周杰伦", style: "致郁", love: null},
-                {name: "心雨", artist: "周杰伦", style: "致郁", love: null},
-                {name: "最伟大的作品", artist: "周杰伦", style: "致郁", love: null},
-                {name: "最长的电影", artist: "周杰伦", style: "致郁", love: null},
-                {name: "大鱼", artist: "周深", style: "致郁", love: null},
-                {name: "化身孤岛的鲸", artist: "周深", style: "致郁", love: null},
-                {name: "愿", artist: "周深", style: "致郁", love: null},
-                {name: "不想", artist: "周思涵", style: "致郁", love: null},
-                {name: "爱在身边", artist: "周兴哲", style: "致郁", love: null},
-                {name: "我爱过你", artist: "周兴哲", style: "致郁", love: null},
-                {name: "怎么了", artist: "周兴哲", style: "致郁", love: null},
-                {name: "飘摇", artist: "周迅", style: "致郁", love: null},
-                {name: "好可惜", artist: "庄心妍", style: "致郁", love: null},
-                {name: "洛丽塔", artist: "卓亚君", style: "致郁", love: null},
-                {name: "终不换", artist: "于文文", style: "致郁", love: null},
-                {name: "虚拟", artist: "陈粒", style: "致郁", love: null},
-                {name: "想念拟人化", artist: "孟慧圆", style: "致郁", love: null},
-                {name: "当我唱起这首歌", artist: "小贱/星弟", style: "致郁", love: null},
-                {name: "水星记", artist: "郭顶", style: "致郁", love: null},
-                {name: "那时以为", artist: "苏星婕", style: "致郁", love: null},
-                {name: "滴滴滴", artist: "许哲佩", style: "致郁", love: null},
-                {name: "那时以为", artist: "苏星婕", style: "致郁", love: null},
-                {name: "如果我变成回忆", artist: "tank", style: "致郁", love: null},
-                {name: "贝多芬的悲伤", artist: "Zey(郑毅) ", style: "致郁", love: null},
-                {name: "不了了之", artist: "冰淇", style: "致郁", love: null},
-                {name: "耿", artist: "汪苏泷", style: "致郁", love: null},
-                {name: "最天使", artist: "曾轶可", style: "致郁", love: null},
-                {name: "我喜欢上你时的内心活动", artist: "陈绮贞", style: "致郁", love: null},
-                {name: "天后", artist: "陈势安", style: "致郁", love: null},
-                {name: "天使的翅膀", artist: "陈依梦", style: "致郁", love: null},
-                {name: "追", artist: "陈壹千", style: "致郁", love: null},
-                {name: "红玫瑰", artist: "陈奕迅", style: "致郁", love: null},
-                {name: "想念拟人化", artist: "孟慧圆", style: "致郁", love: null},
-                {name: "当我唱起这首歌", artist: "小贱/星弟", style: "致郁", love: null},
-                {name: "慢冷", artist: "梁静茹", style: "致郁", love: null},
-                {name: "两清", artist: "烟（许佳豪）", style: "致郁", love: null},
-                {name: "一个深受的女孩", artist: "本兮", style: "致郁", love: null},
-                {name: "爱存在", artist: "王诗安", style: "致郁", love: null},
-                {name: "父亲", artist: "筷子兄弟", style: "致郁", love: null},
-                {name: "时间长了受不了", artist: "庄心妍", style: "治愈", love: null},
-                {name: "月牙湾", artist: "A Lin", style: "治愈", love: null},
-                {name: "愿你", artist: "昼夜", style: "治愈", love: null},
-                {name: "永不失联的爱", artist: "周兴哲", style: "治愈", love: null},
-                {name: "星晴", artist: "周杰伦", style: "治愈", love: null},
-                {name: "约定", artist: "周惠", style: "治愈", love: null},
-                {name: "笔记", artist: "周笔畅", style: "治愈", love: null},
-                {name: "真心不假", artist: "赵薇", style: "治愈", love: null},
-                {name: "爱我别走", artist: "张震岳", style: "治愈", love: null},
-                {name: "小宇", artist: "张震岳", style: "治愈", love: null},
-                {name: "偏爱", artist: "张云京", style: "治愈", love: null},
-                {name: "一个人", artist: "张艺兴", style: "治愈", love: null},
-                {name: "crystal plane", artist: "张瑶", style: "治愈", love: null},
-                {name: "爱就一个字", artist: "张信哲", style: "治愈", love: null},
-                {name: "萱草花", artist: "张小斐", style: "治愈", love: null},
-                {name: "看的最远的地方", artist: "张韶涵", style: "治愈", love: null},
-                {name: "梦里花", artist: "张韶涵", style: "治愈", love: null},
-                {name: "呐喊", artist: "张韶涵", style: "治愈", love: null},
-                {name: "隐形的翅膀", artist: "张靓颖", style: "治愈", love: null},
-                {name: "着魔", artist: "张杰", style: "治愈", love: null},
-                {name: "当你孤单你会想起谁", artist: "张栋梁", style: "治愈", love: null},
-                {name: "小乌龟", artist: "张栋梁", style: "治愈", love: null},
-                {name: "等你到冬天", artist: "张德伊玲", style: "治愈", love: null},
-                {name: "暖心", artist: "郁可唯", style: "治愈", love: null},
-                {name: "侧脸", artist: "于果", style: "治愈", love: null},
-                {name: "不下雨就出太阳吧", artist: "游鸿明", style: "治愈", love: null},
-                {name: "昨日青空", artist: "尤长靖", style: "治愈", love: null},
-                {name: "浮木", artist: "悠然然", style: "治愈", love: null},
-                {name: "奔赴星空", artist: "尹昔眠", style: "治愈", love: null},
-                {name: "落在生命里的光", artist: "尹昔眠", style: "治愈", love: null},
-                {name: "爱不单行", artist: "叶炫清", style: "治愈", love: null},
-                {name: "脆弱星球", artist: "杨胖雨", style: "治愈", love: null},
-                {name: "爱的供养", artist: "杨幂", style: "治愈", love: null},
-                {name: "只想爱你", artist: "杨丞琳", style: "治愈", love: null},
-                {name: "重新认识我", artist: "杨丞琳", style: "治愈", love: null},
-                {name: "绿洲", artist: "颜小健、任然", style: "治愈", love: null},
-                {name: "解药", artist: "颜小健", style: "治愈", love: null},
-                {name: "全球变冷", artist: "许嵩", style: "治愈", love: null},
-                {name: "我依然爱你", artist: "许茹芸", style: "治愈", love: null},
-                {name: "城里的月光", artist: "许美静", style: "治愈", love: null},
-                {name: "寻水的鱼", artist: "许飞", style: "治愈", love: null},
-                {name: "光阴独白", artist: "徐佳莹", style: "治愈", love: null},
-                {name: "红黑", artist: "小星星", style: "治愈", love: null},
-                {name: "向云端", artist: "小霞、海洋bo", style: "治愈", love: null},
-                {name: "一个人", artist: "夏婉安", style: "治愈", love: null},
-                {name: "巷子和树", artist: "西二", style: "治愈", love: null},
-                {name: "拥抱", artist: "五月天", style: "治愈", love: null},
-                {name: "后来的我们", artist: "五月天", style: "治愈", love: null},
-                {name: "年轮说", artist: "吴奕妤", style: "治愈", love: null},
-                {name: "一路生花", artist: "温奕心", style: "治愈", love: null},
-                {name: "同手同脚", artist: "温岚", style: "治愈", love: null},
-                {name: "爱存在", artist: "魏奇奇", style: "治愈", love: null},
-                {name: "流星雨又来临", artist: "魏晨", style: "治愈", love: null},
-                {name: "我们都是好孩子", artist: "王筝", style: "治愈", love: null},
-                {name: "还是好朋友", artist: "王心凌", style: "治愈", love: null},
-                {name: "第一次爱的人", artist: "王心凌", style: "治愈", love: null},
-                {name: "黄昏晓", artist: "王心凌", style: "治愈", love: null},
-                {name: "小星星", artist: "王心凌", style: "治愈", love: null},
-                {name: "羽毛", artist: "王心凌", style: "治愈", love: null},
-                {name: "这就是爱", artist: "王心凌", style: "治愈", love: null},
-                {name: "是不是爱情", artist: "王若琳", style: "治愈", love: null},
-                {name: "有你的快乐", artist: "王若琳", style: "治愈", love: null},
-                {name: "爸爸妈妈", artist: "王蓉", style: "治愈", love: null},
-                {name: "揉碎夜的光", artist: "王靖雯", style: "治愈", love: null},
-                {name: "红豆", artist: "王菲", style: "治愈", love: null},
-                {name: "旋木", artist: "王菲", style: "治愈", love: null},
-                {name: "这条小鱼在乎", artist: "王OK", style: "治愈", love: null},
-                {name: "还是", artist: "兔子ST", style: "治愈", love: null},
-                {name: "小幸运", artist: "田馥甄", style: "治愈", love: null},
-                {name: "普通朋友", artist: "陶喆", style: "治愈", love: null},
-                {name: "如果有来生", artist: "谭维维", style: "治愈", love: null},
-                {name: "时光手扎", artist: "孙羽幽", style: "治愈", love: null},
-                {name: "开始懂了", artist: "孙燕姿", style: "治愈", love: null},
-                {name: "我想你的时候", artist: "苏二零", style: "治愈", love: null},
-                {name: "小情歌", artist: "苏打绿", style: "治愈", love: null},
-                {name: "欢", artist: "苏琛", style: "治愈", love: null},
-                {name: "星河万里", artist: "苏贝贝", style: "治愈", love: null},
-                {name: "一生有你", artist: "水木年华", style: "治愈", love: null},
-                {name: "单向箭头", artist: "双笙", style: "治愈", love: null},
-                {name: "漫长的告白", artist: "双笙", style: "治愈", love: null},
-                {name: "胆小鬼", artist: "容祖儿", style: "治愈", love: null},
-                {name: "有可能的夜晚", artist: "任然", style: "治愈", love: null},
-                {name: "我的歌声里", artist: "曲婉婷", style: "治愈", love: null},
-                {name: "霞光", artist: "曲锦楠", style: "治愈", love: null},
-                {name: "太阳", artist: "邱振哲", style: "治愈", love: null},
-                {name: "大天蓬", artist: "清er", style: "治愈", love: null},
-                {name: "喜欢两个人", artist: "彭佳慧", style: "治愈", love: null},
-                {name: "明天 你好", artist: "牛奶咖啡", style: "治愈", love: null},
-                {name: "越长大越孤单", artist: "牛奶咖啡", style: "治愈", love: null},
-                {name: "慢一点", artist: "你的九儿", style: "治愈", love: null},
-                {name: "慢慢喜欢你", artist: "莫文蔚", style: "治愈", love: null},
-                {name: "勇气", artist: "棉子", style: "治愈", love: null},
-                {name: "爱斯基摩", artist: "蜜雪薇琪", style: "治愈", love: null},
-                {name: "火", artist: "曼陀罗乐队", style: "治愈", love: null},
-                {name: "9420", artist: "麦小兜", style: "治愈", love: null},
-                {name: "爱转角", artist: "罗志祥", style: "治愈", love: null},
-                {name: "靠近", artist: "罗震环", style: "治愈", love: null},
-                {name: "恋爱的距离", artist: "刘梓炎", style: "治愈", love: null},
-                {name: "多想留在你身边", artist: "刘增瞳", style: "治愈", love: null},
-                {name: "那年春天下着雪", artist: "刘心", style: "治愈", love: null},
-                {name: "恋风恋歌", artist: "刘惜君", style: "治愈", love: null},
-                {name: "房间", artist: "刘瑞琦", style: "治愈", love: null},
-                {name: "感官先生", artist: "刘凤瑶", style: "治愈", love: null},
-                {name: "朝汐", artist: "泠鸢yousa和双笙", style: "治愈", love: null},
-                {name: "想自由", artist: "林宥嘉", style: "治愈", love: null},
-                {name: "至少还有你", artist: "林依莲", style: "治愈", love: null},
-                {name: "非你莫属", artist: "林依晨", style: "治愈", love: null},
-                {name: "Always online", artist: "林俊杰", style: "治愈", love: null},
-                {name: "她说", artist: "林俊杰", style: "治愈", love: null},
-                {name: "爱久见人心", artist: "梁静茹", style: "治愈", love: null},
-                {name: "崇拜", artist: "梁静茹", style: "治愈", love: null},
-                {name: "孤单北半球", artist: "梁静茹", style: "治愈", love: null},
-                {name: "可乐戒指", artist: "梁静茹", style: "治愈", love: null},
-                {name: "无条件为你", artist: "梁静茹", style: "治愈", love: null},
-                {name: "勇气", artist: "梁静茹", style: "治愈", love: null},
-                {name: "宁夏", artist: "梁静茹", style: "治愈", love: null},
-                {name: "你那边还好吗", artist: "李子阳", style: "治愈", love: null},
-                {name: "下个路口再见吧", artist: "李宇春", style: "治愈", love: null},
-                {name: "雨蝶", artist: "李翊君", style: "治愈", love: null},
-                {name: "贝加尔湖畔", artist: "李健", style: "治愈", love: null},
-                {name: "悬崖的花", artist: "冷漠", style: "治愈", love: null},
-                {name: "老男孩", artist: "筷子兄弟", style: "治愈", love: null},
-                {name: "这一生关于你的风景", artist: "枯木逢春", style: "治愈", love: null},
+                {name: "爸爸妈妈", artist: "王蓉", style: "致郁", love: null},
+                {name: "揉碎夜的光", artist: "王靖雯", style: "致郁", love: null},
+                {name: "红豆", artist: "王菲", style: "致郁", love: null},
+                {name: "旋木", artist: "王菲", style: "致郁", love: null},
+                {name: "这条小鱼在乎", artist: "王OK", style: "致郁", love: null},
+                {name: "还是", artist: "兔子ST", style: "致郁", love: null},
+                {name: "小幸运", artist: "田馥甄", style: "致郁", love: null},
+                {name: "普通朋友", artist: "陶喆", style: "致郁", love: null},
+                {name: "如果有来生", artist: "谭维维", style: "致郁", love: null},
+                {name: "时光手扎", artist: "孙羽幽", style: "致郁", love: null},
+                {name: "开始懂了", artist: "孙燕姿", style: "致郁", love: null},
+                {name: "我想你的时候", artist: "苏二零", style: "致郁", love: null},
+                {name: "小情歌", artist: "苏打绿", style: "致郁", love: null},
+                {name: "欢", artist: "苏琛", style: "致郁", love: null},
+                {name: "星河万里", artist: "苏贝贝", style: "致郁", love: null},
+                {name: "一生有你", artist: "水木年华", style: "致郁", love: null},
+                {name: "单向箭头", artist: "双笙", style: "致郁", love: null},
+                {name: "漫长的告白", artist: "双笙", style: "致郁", love: null},
+                {name: "胆小鬼", artist: "容祖儿", style: "致郁", love: null},
+                {name: "有可能的夜晚", artist: "任然", style: "致郁", love: null},
+                {name: "我的歌声里", artist: "曲婉婷", style: "致郁", love: null},
+                {name: "霞光", artist: "曲锦楠", style: "致郁", love: null},
+                {name: "太阳", artist: "邱振哲", style: "致郁", love: null},
+                {name: "大天蓬", artist: "清er", style: "致郁", love: null},
+                {name: "喜欢两个人", artist: "彭佳慧", style: "致郁", love: null},
+                {name: "明天 你好", artist: "牛奶咖啡", style: "致郁", love: null},
+                {name: "越长大越孤单", artist: "牛奶咖啡", style: "致郁", love: null},
+                {name: "慢一点", artist: "你的九儿", style: "致郁", love: null},
+                {name: "慢慢喜欢你", artist: "莫文蔚", style: "致郁", love: null},
+                {name: "勇气", artist: "棉子", style: "致郁", love: null},
+                {name: "爱斯基摩", artist: "蜜雪薇琪", style: "致郁", love: null},
+                {name: "火", artist: "曼陀罗乐队", style: "致郁", love: null},
+                {name: "9420", artist: "麦小兜", style: "致郁", love: null},
+                {name: "爱转角", artist: "罗志祥", style: "致郁", love: null},
+                {name: "靠近", artist: "罗震环", style: "致郁", love: null},
+                {name: "恋爱的距离", artist: "刘梓炎", style: "致郁", love: null},
+                {name: "多想留在你身边", artist: "刘增瞳", style: "致郁", love: null},
+                {name: "那年春天下着雪", artist: "刘心", style: "致郁", love: null},
+                {name: "恋风恋歌", artist: "刘惜君", style: "致郁", love: null},
+                {name: "房间", artist: "刘瑞琦", style: "致郁", love: null},
+                {name: "感官先生", artist: "刘凤瑶", style: "致郁", love: null},
+                {name: "朝汐", artist: "泠鸢yousa和双笙", style: "致郁", love: null},
+                {name: "想自由", artist: "林宥嘉", style: "致郁", love: null},
+                {name: "至少还有你", artist: "林依莲", style: "致郁", love: null},
+                {name: "非你莫属", artist: "林依晨", style: "致郁", love: null},
+                {name: "Always online", artist: "林俊杰", style: "致郁", love: null},
+                {name: "她说", artist: "林俊杰", style: "致郁", love: null},
+                {name: "爱久见人心", artist: "梁静茹", style: "致郁", love: null},
+                {name: "崇拜", artist: "梁静茹", style: "致郁", love: null},
+                {name: "孤单北半球", artist: "梁静茹", style: "致郁", love: null},
+                {name: "可乐戒指", artist: "梁静茹", style: "致郁", love: null},
+                {name: "无条件为你", artist: "梁静茹", style: "致郁", love: null},
+                {name: "勇气", artist: "梁静茹", style: "致郁", love: null},
+                {name: "宁夏", artist: "梁静茹", style: "致郁", love: null},
+                {name: "你那边还好吗", artist: "李子阳", style: "致郁", love: null},
+                {name: "下个路口再见吧", artist: "李宇春", style: "致郁", love: null},
+                {name: "雨蝶", artist: "李翊君", style: "致郁", love: null},
+                {name: "贝加尔湖畔", artist: "李健", style: "致郁", love: null},
+                {name: "悬崖的花", artist: "冷漠", style: "致郁", love: null},
+                {name: "老男孩", artist: "筷子兄弟", style: "致郁", love: null},
+                {name: "这一生关于你的风景", artist: "枯木逢春", style: "致郁", love: null},
                 {name: "被风吹过的夏天", artist: "金莎、林俊杰", style: "治愈", love: null},
                 {name: "午夜唱情歌", artist: "姜玉阳", style: "治愈", love: null},
                 {name: "星辰大海", artist: "黄霄雲", style: "治愈", love: null},
@@ -1777,7 +1691,6 @@
                 {name: "专属约定", artist: "孙羽幽", style: "原创", love: null},
                 {name: "种豆南山下", artist: "孙羽幽", style: "原创", love: null},
                 {name: "笑如花", artist: "孙羽幽", style: "原创", love: null},
-                {name: "5267", artist: "孙羽幽", style: "原创", love: null},
                 {name: "花不语", artist: "孙羽幽", style: "原创", love: null},
                 {name: "你是我留不住的风景", artist: "单小源,孙羽幽", style: "原创 ", love: null},
                 {name: "如果当初没有开口", artist: "孙羽幽", style: "原创", love: null},
@@ -1791,8 +1704,8 @@
                 {name: "局部有雨", artist: "孙羽幽", style: "原创", love: true },
                 {name: "雪停下来的时候", artist: "孙羽幽", style: "原创", love: true },
                 {name: "遇见晴天", artist: "孙羽幽", style: "原创", love: null},
-                {name: "无法言喻", artist: "孙羽幽", style: "原创 ", love: null},
-                {name: "错过晚风", artist: "孙羽幽", style: "原创 ", love: null},
+                {name: "无法言喻", artist: "孙羽幽", style: "原创", love: null},
+                {name: "错过晚风", artist: "孙羽幽", style: "原创", love: null},
                 {name: "七秒钟的记忆", artist: "孙羽幽", style: "提督", love: null},
                 {name: "虐心", artist: "孙羽幽", style: "提督", love: null},
                 {name: "情话", artist: "孙羽幽", style: "提督", love: null},
@@ -1815,7 +1728,6 @@
         let searchTimer = null;
         let isDrawing = false;
         let currentStyle = 'all'; // 当前选中的曲风
-        let lastScrollTop = 0;
 
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
@@ -1831,20 +1743,6 @@
                 } else {
                     backToTopButton.style.display = "none";
                 }
-                
-                // 导航栏智能隐藏
-                const nav = document.getElementById('smartNav');
-                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
-                if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
-                    // 向下滚动并且超过100px时隐藏
-                    nav.classList.add('hidden');
-                } else {
-                    // 向上滚动时显示
-                    nav.classList.remove('hidden');
-                }
-                
-                lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
             });
         });
 
